@@ -18,7 +18,7 @@ const InstantMeeting = () => {
     answerCall,
     leaveCall,
     error,
-    setall_users,all_users
+    startRecording,stopRecording,downloadRecording
   } = useContext(socketContext);
 
   const [idToCall, setidToCall] = useState("");
@@ -30,8 +30,7 @@ const InstantMeeting = () => {
       console.error("Error:", error);
     }
 
-setall_users((prev)=>[...prev , me])
-console.log(me,all_users)
+
 
 
   }, [error]);
@@ -127,6 +126,11 @@ console.log(me,all_users)
           </div>
 
           <div className="flex justify-between items-center gap-x-4">
+          <button onClick={startRecording} className="record-btn">
+  Start analysis
+</button>
+
+
             <button
               onClick={toggleVideo}
               className={`p-3 rounded-full ${

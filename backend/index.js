@@ -26,6 +26,7 @@ io.on("connection", (socket) => {
 
     socket.on("disconnect", () => {
         socket.broadcast.emit("callended");
+        io.emit("userLeft", { userId: socket.id });
     });
     
   
@@ -33,11 +34,8 @@ io.on("connection", (socket) => {
        
         io.to(userToCall).emit("calluser", { signal: signalData, from, name });
     });
-    socket.on("leavecall", ({ userToCall, name }) => {
-       
-        io.to(userToCall).emit("leavecall",name);
-    });
 
+    
 
     socket.on("answercall", (data) => {
         io.to(data.to).emit("callaccepted", data.signal);

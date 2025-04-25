@@ -17,7 +17,7 @@ const JoinMeeting = () => {
     answerCall,
     leaveCall,
     error,
-    all_users
+    info
   } = useContext(socketContext);
 
   const [isVideoEnabled, setIsVideoEnabled] = useState(true);
@@ -81,7 +81,7 @@ const JoinMeeting = () => {
                 className="border-2 h-60 w-[30rem] rounded-lg"
               />
               <p className="absolute bottom-2 left-2 text-white bg-black bg-opacity-50 px-2 py-1 rounded">
-                {call?.name || "Caller"}
+                {call?.name || "Caller"}  {info}
               </p>
             </div>
           )}

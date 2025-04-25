@@ -26,7 +26,9 @@ const ContextProvider = ({ children }) => {
   const [callended, setcallended] = useState(false);
   const [name, setname] = useState("test");
   const [error, setError] = useState(null);
-  const [all_users, setall_users] = useState([])
+  const [info, setinfo] = useState("")
+  const recordedChunks = useRef([]);
+
 
   const myvideo = useRef();
   const userVideo = useRef();
@@ -87,7 +89,14 @@ const ContextProvider = ({ children }) => {
         name: callerName,
         signal,
       });
+
+
     });
+    socket.on("userLeft", (data) => {
+      setinfo("User left");
+      console.log(`User ${data.userId} has left the chat`);
+  });
+  
 
     return () => {
       // Cleanup
@@ -99,6 +108,7 @@ const ContextProvider = ({ children }) => {
       }
       socket.off("me");
       socket.off("calluser");
+      socket.off("userleft");
       socket.off("connect_error");
       socket.off("connect_timeout");
       socket.off("disconnect");
@@ -180,23 +190,78 @@ const ContextProvider = ({ children }) => {
       setError(`Failed to initiate call: ${err.message}`);
     }
   };
+  const startRecording = () => {
+    if (stream) {
+      const mediaRecorder = new MediaRecorder(stream, {
+        mimeType: 'video/webm; codecs=vp9',
+      });
+  
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          recordedChunks.current.push(event.data);
+        }
+      };
+  
+      mediaRecorder.onstop = () => {
+        const blob = new Blob(recordedChunks.current, { type: 'video/webm' });
+        recordedChunks.current = [];
+        const url = URL.createObjectURL(blob);
+        downloadRecording(url); // Save or display the recording
+      };
+  
+      mediaRecorder.start();
+  
+      // Ensure connectionRef.current is defined
+      if (!connectionRef.current) {
+        connectionRef.current = {};
+      }
+  
+      connectionRef.current.mediaRecorder = mediaRecorder; // Assign the mediaRecorder
+    } else {
+      console.error('No stream available for recording.');
+    }
+  };
+
+  const stopRecording = () => {
+    if (connectionRef.current.mediaRecorder) {
+      connectionRef.current.mediaRecorder.stop();
+    } else {
+      console.error('No active recording found.');
+    }
+  };
+  
+  const downloadRecording = (url) => {
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Recording-${Date.now()}.webm`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
+
 
   const leaveCall = () => {
     try {
       setcallended(true);
       if (connectionRef.current) {
         connectionRef.current.destroy();
+stopRecording()
       }
       if (userVideo.current) {
         
         userVideo.current.srcObject = null;
       }
+
+
       window.location.reload();
     } catch (err) {
       setError(`Error ending call: ${err.message}`);
     }
   };
 
+ 
+  
+  
   return (
     <socketContext.Provider
       value={{
@@ -213,8 +278,7 @@ const ContextProvider = ({ children }) => {
         answerCall,
         leaveCall,
         error,
-        setall_users,
-        all_users
+        info,startRecording,stopRecording,downloadRecording
       }}
     >
       {children}
