@@ -7,7 +7,18 @@ export default defineConfig({
     tailwindcss(),
 
   ],
- 
-
+  resolve: {
+    alias: {
+      'simple-peer': 'simple-peer/simplepeer.min.js',
+    },
+  },
+  optimizeDeps: {
+    include: ['simple-peer'],
+  },
+  build: {
+    commonjsOptions: {
+      include: [/simple-peer/, /node_modules/],
+    },
+  },
   
 });

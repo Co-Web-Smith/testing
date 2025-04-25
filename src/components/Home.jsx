@@ -12,6 +12,8 @@ const Home = () => {
       const [isSidebarOpen, setSidebarOpen] = useState(false);
       const sidebarRef = useRef(null);
       const menuToggleRef = useRef(null);
+      const [joinId, setjoinId] = useState("")
+
     
       useEffect(() => {
         const handleClickOutside = (event) => {
@@ -65,11 +67,11 @@ const Home = () => {
               </div>
               <div className="nav-controls">
             <div className="search-bar">
-              <input type="text" placeholder="Enter meeting code..." />
-                  <button className="join-btn">
+              <input type="text" placeholder="Enter meeting code..." onChange={(e)=>{localStorage.setItem("id",e.target.value)}} />
+                  <Link to='/JoinMeeting' className="join-btn">
                     <span className="btn-text">Join Now</span>
                     <span className="btn-icon">→</span>
-                  </button>
+                  </Link>
                 </div>
                 <button 
                   className="menu-toggle glow-animation" 

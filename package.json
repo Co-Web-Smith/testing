@@ -6,11 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-      "backend": "nodemon backend/index.js",
-  "start": "concurrently \"npm run dev\" \"npm run backend\"",
+    "backend": "nodemon backend/index.js",
+    "start": "concurrently \"npm run dev\" \"npm run backend\"",
     "lint": "eslint .",
     "preview": "vite preview"
-
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.4",
