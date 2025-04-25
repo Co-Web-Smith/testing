@@ -1,13 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { socketContext } from "../SocketContext";
-import {
-  FaVideo,
-  FaVideoSlash,
-  FaPhone,
-  FaMicrophone,
-  FaMicrophoneSlash,
-  FaPhoneSlash,
-} from "react-icons/fa";
+import {FaVideo,FaVideoSlash,FaPhone,FaMicrophone,FaMicrophoneSlash,FaPhoneSlash,} from "react-icons/fa";
 
 const JoinMeeting = () => {
   const {
@@ -24,6 +17,7 @@ const JoinMeeting = () => {
     answerCall,
     leaveCall,
     error,
+    all_users
   } = useContext(socketContext);
 
   const [isVideoEnabled, setIsVideoEnabled] = useState(true);
@@ -63,14 +57,35 @@ const JoinMeeting = () => {
           <p>Room Code:  {idToCall}</p>
 
           {/* Video preview */}
-          <div className="flex justify-center items-center mb-2">
-            <video
-              ref={myvideo}
-              autoPlay
-              playsInline
-              className="mt-4 border-2 h-[20rem] w-[27rem] "
-            />
-          </div>
+          <div className="flex justify-between items-center gap-4 p-4">
+            <div className="relative">
+              <video
+                autoPlay
+                muted
+                ref={myvideo}
+                playsInline
+                className="border-2 h-60 w-[30rem] rounded-lg"
+              />
+              <p className="absolute bottom-2 left-2 text-white bg-black bg-opacity-50 px-2 py-1 rounded">
+                You ({name})
+              </p>
+            </div>
+
+          {callaccepted && !callended && (
+            <div className="relative">
+
+              <video
+                autoPlay
+                ref={userVideo}
+                playsInline
+                className="border-2 h-60 w-[30rem] rounded-lg"
+              />
+              <p className="absolute bottom-2 left-2 text-white bg-black bg-opacity-50 px-2 py-1 rounded">
+                {call?.name || "Caller"}
+              </p>
+            </div>
+          )}
+        </div>
 
           {/* All option */}
           <div className="flex justify-center items-center mt-4 gap-x-2">
@@ -100,13 +115,29 @@ const JoinMeeting = () => {
               )}
             </button>
 
-            <button
-              onClick={() => callUser(idToCall)}
-              disabled={!idToCall}
-              className="flex justify-between items-center gap-x-1.5 p-3 rounded-full bg-green-500 hover:bg-green-600 transition-colors disabled:opacit  disabled:cursor-not-allowed"
-            >
-             Ready To Goo! <FaPhone className="text-white text-xl " />
-            </button>
+
+  
+  {!callaccepted && !callended ? (
+  <button
+  onClick={() => callUser(idToCall)}
+  disabled={!idToCall}
+  className="flex justify-between items-center gap-x-1.5 p-3 rounded-full bg-green-500 hover:bg-green-600 transition-colors disabled:opacit  disabled:cursor-not-allowed"
+>
+ Ready To Goo! <FaPhone className="text-white text-xl " />
+</button>
+
+
+
+  ):<button
+  onClick={leaveCall}
+  className="flex justify-between items-center gap-x-1.5 p-3 rounded-full bg-green-500 hover:bg-green-600 transition-colors disabled:opacit  disabled:cursor-not-allowed"
+  >
+  Hang up <FaPhoneSlash className="text-white text-xl " />
+  </button>}
+          
+ 
+          
+            
           </div>
         </div>
       </div>

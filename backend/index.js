@@ -33,6 +33,10 @@ io.on("connection", (socket) => {
        
         io.to(userToCall).emit("calluser", { signal: signalData, from, name });
     });
+    socket.on("leavecall", ({ userToCall, name }) => {
+       
+        io.to(userToCall).emit("leavecall",name);
+    });
 
 
     socket.on("answercall", (data) => {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Link } from 'react-router-dom';
 
 const Home = () => {
@@ -13,9 +13,10 @@ const Home = () => {
       const sidebarRef = useRef(null);
       const menuToggleRef = useRef(null);
       const [joinId, setjoinId] = useState("")
-
     
       useEffect(() => {
+
+
         const handleClickOutside = (event) => {
           if (
             isSidebarOpen && 
@@ -207,13 +208,11 @@ const Home = () => {
                   <span className="btn-icon">📅</span>
                   Schedule Meeting
                 </button>
-                <button  className="action-btn">
-                    <Link to={'/InstantMeeting'}>
+                <Link to={'/InstantMeeting'} className="action-btn" >
                   <span className="btn-icon">⚡</span>
                   Start Instant Meeting
                     
-                    </Link>
-                </button>
+                </Link>
                 <button className="action-btn">
                   <span className="btn-icon">👥</span>
                   Create Mitr Group

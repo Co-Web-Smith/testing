@@ -18,6 +18,7 @@ const InstantMeeting = () => {
     answerCall,
     leaveCall,
     error,
+    setall_users,all_users
   } = useContext(socketContext);
 
   const [idToCall, setidToCall] = useState("");
@@ -28,6 +29,11 @@ const InstantMeeting = () => {
     if (error) {
       console.error("Error:", error);
     }
+
+setall_users((prev)=>[...prev , me])
+console.log(me,all_users)
+
+
   }, [error]);
 
   const toggleVideo = () => {

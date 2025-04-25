@@ -26,6 +26,7 @@ const ContextProvider = ({ children }) => {
   const [callended, setcallended] = useState(false);
   const [name, setname] = useState("test");
   const [error, setError] = useState(null);
+  const [all_users, setall_users] = useState([])
 
   const myvideo = useRef();
   const userVideo = useRef();
@@ -71,6 +72,7 @@ const ContextProvider = ({ children }) => {
       };
 
       initializeMedia();
+
     
 
 
@@ -186,6 +188,7 @@ const ContextProvider = ({ children }) => {
         connectionRef.current.destroy();
       }
       if (userVideo.current) {
+        
         userVideo.current.srcObject = null;
       }
       window.location.reload();
@@ -210,6 +213,8 @@ const ContextProvider = ({ children }) => {
         answerCall,
         leaveCall,
         error,
+        setall_users,
+        all_users
       }}
     >
       {children}
